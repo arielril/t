@@ -20,7 +20,6 @@ type Config struct {
 }
 
 func NewFromCommand(cmd *cobra.Command, interactive bool) aws.Config {
-	fmt.Printf("is interactive? %v\n", interactive)
 	accessKeyId, _ := cmd.PersistentFlags().GetString("access-key-id")
 	secretAccessKey, _ := cmd.PersistentFlags().GetString("secret-access-key")
 	region, _ := cmd.PersistentFlags().GetString("region")
@@ -35,23 +34,17 @@ func NewFromCommand(cmd *cobra.Command, interactive bool) aws.Config {
 	var err error
 
 	if interactive {
-		//if customConfig.KeyID == "" {
 		// get aws key id from user
 		customConfig.KeyID = strings.TrimSpace(readUserInput("AWS Access Key ID: "))
-		//}
 
-		//if customConfig.SecretKey == "" {
 		// get aws secret key id from user
 		customConfig.SecretKey = strings.TrimSpace(readUserInput("AWS Secret Key: "))
-		//}
 
-		//if customConfig.Region == "" {
 		customConfig.Region = strings.TrimSpace(readUserInput("AWS Region (default `us-east-1`): "))
 
 		if customConfig.Region == "" {
 			customConfig.Region = "us-east-1"
 		}
-		//}
 
 		// https://docs.aws.amazon.com/sdk-for-go/v2/developer-guide/configure-gosdk.html
 		cfg, err = config.LoadDefaultConfig(
