@@ -36,8 +36,8 @@ var hexEncodeCmd = &cobra.Command{
 }
 
 func init() {
+	hexCmd.PersistentFlags().BoolVar(&format.isAscii, "ascii", true, "ASCII input")
 	hexCmd.PersistentFlags().BoolVar(&format.isBin, "bin", false, "Binary input")
-	hexCmd.PersistentFlags().BoolVar(&format.isAscii, "ascii", false, "ASCII input")
 	hexCmd.PersistentFlags().BoolVar(&format.isNum, "num", false, "Number input")
 
 	hexCmd.AddCommand(hexDecodeCmd, hexEncodeCmd)
@@ -55,6 +55,7 @@ func getInput(cmd *cobra.Command, args []string) string {
 
 func encodeHex(cmd *cobra.Command, args []string) {
 	// * need to know the input format bin/string/number/hex
+	format.isAscii = format.isAscii && !format.isBin && !format.isNum
 	input := getInput(cmd, args)
 
 	var result string
