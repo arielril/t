@@ -18,7 +18,9 @@ func UploadFiles(cfg aws.Config, bucketName string, fileNames []string) {
 			continue
 		}
 
-		client := s3.NewFromConfig(cfg)
+		client := s3.NewFromConfig(cfg, func(o *s3.Options) {
+			o.EndpointOptions.DisableHTTPS = true
+		})
 		putOutput, err := client.PutObject(context.TODO(), &s3.PutObjectInput{
 			Body:   fileContent,
 			Bucket: aws.String(bucketName),
