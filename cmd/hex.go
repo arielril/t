@@ -7,7 +7,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/arielril/hktb/internal"
+	"github.com/arielril/t/internal"
 	"github.com/spf13/cobra"
 )
 
