@@ -37,16 +37,16 @@ func NewFromCommand(cmd *cobra.Command, interactive bool) aws.Config {
 	if interactive {
 		//if customConfig.KeyID == "" {
 		// get aws key id from user
-		customConfig.KeyID = readUserInput("AWS Access Key ID: ")
+		customConfig.KeyID = strings.TrimSpace(readUserInput("AWS Access Key ID: "))
 		//}
 
 		//if customConfig.SecretKey == "" {
 		// get aws secret key id from user
-		customConfig.SecretKey = readUserInput("AWS Secret Key: ")
+		customConfig.SecretKey = strings.TrimSpace(readUserInput("AWS Secret Key: "))
 		//}
 
 		//if customConfig.Region == "" {
-		customConfig.Region = readUserInput("AWS Region (default `us-east-1`): ")
+		customConfig.Region = strings.TrimSpace(readUserInput("AWS Region (default `us-east-1`): "))
 
 		if customConfig.Region == "" {
 			customConfig.Region = "us-east-1"
@@ -59,6 +59,7 @@ func NewFromCommand(cmd *cobra.Command, interactive bool) aws.Config {
 			config.WithCredentialsProvider(
 				credentials.NewStaticCredentialsProvider(customConfig.KeyID, customConfig.SecretKey, ""),
 			),
+			config.WithRegion(customConfig.Region),
 		)
 	} else {
 		cfg, err = config.LoadDefaultConfig(context.TODO())
