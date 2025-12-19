@@ -3,7 +3,6 @@ package cmd
 import (
 	"encoding/hex"
 	"fmt"
-	"io"
 	"strconv"
 	"strings"
 
@@ -44,19 +43,10 @@ func init() {
 	rootCmd.AddCommand(hexCmd)
 }
 
-func getInput(cmd *cobra.Command, args []string) string {
-	if len(args) == 0 {
-		inputData, err := io.ReadAll(cmd.InOrStdin())
-		cobra.CheckErr(err)
-		return string(inputData)
-	}
-	return strings.Join(args, " ")
-}
-
 func encodeHex(cmd *cobra.Command, args []string) {
 	// * need to know the input format bin/string/number/hex
 	format.isAscii = format.isAscii && !format.isBin && !format.isNum
-	input := getInput(cmd, args)
+	input := strings.Join(internal.GetCmdPositionalArgs(cmd, args), " ")
 
 	var result string
 
@@ -80,7 +70,7 @@ func encodeHex(cmd *cobra.Command, args []string) {
 
 func decodeHex(cmd *cobra.Command, args []string) {
 	// ! input as hex -> output bin/string/number/hex (same as win dbg)
-	input := getInput(cmd, args)
+	input := strings.Join(internal.GetCmdPositionalArgs(cmd, args), " ")
 	if strings.Contains(input, "0x") {
 		input = strings.Replace(input, "0x", "", 1)
 	}
